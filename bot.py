@@ -4,6 +4,8 @@ import traceback
 from skimage import io
 from telegram import Bot, Update
 from telegram.ext import Updater, MessageHandler, Filters
+import skimage.io as skio
+import numpy as np
 
 
 TG_TOKEN = '1374700679:AAHfE0m5qMBUc_QZ1Oikh7yiG7afFCpk_x8'
@@ -30,9 +32,18 @@ def message_handler(update, context):
         else:
             bot.send_message(chat_id=chat_id, text='Processing...')
 
+            # delete the following line after inserting LBP routine
+            img = np.full((5, 5), False)
+
+            # TODO: insert LBP routine here
+            #
+
+            processed_filename = 'processed.jpg'
+            skio.imsave(processed_filename, img)
+
             out_text = f'Here is your image:'
             bot.send_message(chat_id=chat_id, text=out_text)
-            bot.send_photo(chat_id=chat_id, photo=open(local_file_path, 'rb'))
+            bot.send_photo(chat_id=chat_id, photo=open(processed_filename, 'rb'))
     except:
         chat_id = update.effective_message.chat_id
         err_txt = traceback.format_exc()
