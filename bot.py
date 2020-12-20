@@ -1,11 +1,13 @@
 import logging
 import os
 import traceback
+import skimage as sk
 from skimage import io
 from telegram import Bot, Update
 from telegram.ext import Updater, MessageHandler, Filters
 import skimage.io as skio
 import numpy as np
+from skimage.feature import local_binary_pattern as lbp
 
 
 TG_TOKEN = '1374700679:AAHfE0m5qMBUc_QZ1Oikh7yiG7afFCpk_x8'
@@ -32,11 +34,9 @@ def message_handler(update, context):
         else:
             bot.send_message(chat_id=chat_id, text='Processing...')
 
-            # delete the following line after inserting LBP routine
-            img = np.full((5, 5), False)
-
-            # TODO: insert LBP routine here
-            #
+            input_img = skio.imread(local_file_path)
+            P, R, method = 8, 1, 'uniform'
+            img = lbp(sk.color.rgb2gray(input_img), P, R, method)
 
             processed_filename = 'processed.jpg'
             skio.imsave(processed_filename, img)
